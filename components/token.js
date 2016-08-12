@@ -12,7 +12,6 @@ exports.generate = function* (store) {
 
 exports.get = function* (token) {
   var store = yield redis.getAsync(REDIS_PREFIX + token);
-  var le = JSON.parse(store);
 
   return store ? JSON.parse(store) : null;
 }
