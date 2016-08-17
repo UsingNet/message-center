@@ -35,17 +35,28 @@ socket.on('message', function(identity, message) {
       case 'update':
         var updated = yield Token.update(store.params[0], store.params[1]);
         resp.ok = true;
-      case 'emit':
-        var messageModel = new Message(store.params);
-        var saved = yield messageModel.save();
-        if (saved) {
-          resp.ok = true;
-          var to = online.get(store.params[0].to);
-          resp.data = {connectors: {im: false}};
-          if (to) {
-            to.socket.send(store.params);
-            resp.data = {connectors: {im: true}};
+      case 'send':
+        var messageModel = new Message(store.params[0]);
+        yield messageModel.save();
+        resp.ok = true;
+        var to = online.get(store.params[0].to);
+        resp.data = {connectors: {im: false}};
+        if (to) {
+          var replied = yield Message.findOne({from: store.params[0].to})
+          if (replied) {
+            to.socket.emit('message', store.params[0]);
+          } else {
+            to.socket.emit('newmessage', store.params[0]);
           }
+          resp.data = {connectors: {im: true}};
+        }
+        break;
+      case 'notify':
+        var messageModel = new Message(store.params[0]);
+        yield messageModel.save();
+        var to = online.get(store.params[0].to);
+        if (to) {
+          to.socket.send(store.params);
         }
         break;
       case 'clients':

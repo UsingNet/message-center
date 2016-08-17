@@ -14,10 +14,15 @@ GET /api/message/agent/token
 import io from 'socket.io-client'
 var socket = io('http://ws.dev.usingnet.net/?token={token}');
 
-// 新消息
+// 消息
 socket.on('message', function() {
     ...
 });
+
+// 新消息
+socket.on('newmessage', function() {
+    ...
+})
 
 // 通知
 socket.on('notify', function() {
