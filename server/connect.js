@@ -1,6 +1,6 @@
-const Token = require('../components/token');
+const Token = require('../lib/token');
 const online = require('./online');
-const Message = require('../model/message');
+const Message = require('../models').message;
 
 module.exports = function* (next) {
   var token = this.query.token;

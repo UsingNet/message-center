@@ -1,8 +1,8 @@
 const zmq = require('zmq');
 const socket = zmq.socket('router');
 const co = require('co');
-const Message = require('../model/message');
-const Token = require('../components/token');
+const Message = require('../models').message;
+const Token = require('../lib/token');
 const online = require('./online');
 const config = require('../config');
 

@@ -5,7 +5,7 @@
 获取 Token
 
 ```
-/api/message/agent/token
+GET /api/message/agent/token
 ```
 
 链接 socket
@@ -30,7 +30,7 @@ socket.on('notify', function() {
 获取 token
 
 ```
-/api/message/agent/token?track_id={track_id}&tid={tid}&
+GET /api/message/agent/token?track_id={track_id}&tid={tid}&
 ```
 
 链接 socket   
@@ -43,3 +43,15 @@ socket.on('message', function() {
 
 });
 ```
+
+
+# Track
+
+```
+/track
+```
+* track_id
+* page_id
+* title
+* referrer
+* user_info

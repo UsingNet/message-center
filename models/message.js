@@ -4,8 +4,6 @@ const Promise = require('bluebird');
 mongoose.Promise = Promise;
 
 const Schema = mongoose.Schema;
-const config = require('../config');
-const db = mongoose.connect(config.mongodb);
 
 const schema = new Schema({
   from: String,

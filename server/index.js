@@ -1,6 +1,7 @@
 
 const connect = require('./connect');
 const koa = require('koa.io');
+const track = require('./track');
 const app = koa();
 
 require('./pusher');
@@ -8,8 +9,6 @@ require('./pusher');
 app.io.use(connect);
 
 
-app.use(function* () {
-  this.body = 'hello';
-})
+app.use(track)
 
 module.exports = app;
