@@ -15,17 +15,18 @@ socket.on('message', function(identity, message) {
     try {
       var store = JSON.parse(message);
     } catch (e) {
-      throw new Error('message is invalid JSON')
+      return socket.send([identity, JSON.stringify({ok: false, error: 'message is invalid JSON'})])
     }
-    var resp = {ok: false};
 
+    var resp = {ok: false};
     if (typeof store !== 'object') {
       resp.data = 'params invild';
       return socket.send([identity, JSON.stringify(resp)]);
     }
     switch(store.method) {
       case 'generate':
-        var token = yield Token.generate(store.params[1].self);
+        console.log(store.params);
+        var token = yield Token.generate(store.params[0].self);
         if (token) {
           resp.ok = true;
           resp.data = token
@@ -64,6 +65,7 @@ socket.on('message', function(identity, message) {
         resp.data = 'Method not allow';
         break;
     }
+
     socket.send([identity, JSON.stringify(resp)]);
   }).catch((err) => {
     console.log(err);
