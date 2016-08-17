@@ -20,7 +20,7 @@
     <script>
 
 
-      const socket = io('http://socket.usingnet.net?token=token_im_4fad5069bda6e5af28');
+      var socket = io('http://socket.usingnet.net?token=token_im_4fad5069bda6e5af28');
 
 
       
@@ -28,28 +28,28 @@
 
       // get token
       /*
-      const from = 'd1nilku8blg30adljnkqgbjd630th4m1';
-      const to = '943b3255785a550a13e007f63a6e58b8';
-      const HOST = 'http://socket.usingnet.net';
-      const INIT_API = `${HOST}/api/message/client/init?from=${from}&to=${to}`;
-      const SOCKET_API = `ws://socket.usingnet.net/ws`;
-      const CONFIG_API = `${HOST}/api/message/client/config?from=${from}&to=${to}`;
-      const SEND_API = `${HOST}/api/message/client`;
+      var from = 'd1nilku8blg30adljnkqgbjd630th4m1';
+      var to = '943b3255785a550a13e007f63a6e58b8';
+      var HOST = 'http://socket.usingnet.net';
+      var INIT_API = `${HOST}/api/message/client/init?from=${from}&to=${to}`;
+      var SOCKET_API = `ws://socket.usingnet.net/ws`;
+      var CONFIG_API = `${HOST}/api/message/client/config?from=${from}&to=${to}`;
+      var SEND_API = `${HOST}/api/message/client`;
       $.ajax({
         url: INIT_API,
         method: 'GET'
       }).then((resp) => {
           if (resp.success) {
-            const token = resp.token;
+            var token = resp.token;
             $.ajax({
               url: `${CONFIG_API}&token=${token}`,
               method: 'GET',
             }).then((resp) => {
-              const messages = template(resp.messages);
+              var messages = template(resp.messages);
               $('.messages').html(messages);
-              const socket = io(`${SOCKET_API}?token=${token}`);
+              var socket = io(`${SOCKET_API}?token=${token}`);
               socket.on('message', function (message) {
-                 const newMessage = template(message);
+                 var newMessage = template(message);
                  $('.messages').append(newMessage);
               });
             });
@@ -57,7 +57,7 @@
       });
 
       function template(_messages) {
-        const messages = [];
+        var messages = [];
         _messages.forEach(message => {
           messages.push(`<li class="item ${message.type.toLowerCase()}">${message.body}</li>`)
         })

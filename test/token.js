@@ -1,14 +1,14 @@
-const co = require('co');
-const assert = require('assert');
-const Token = require('../components/token');
-const redis = require('../components/redis');
+var co = require('co');
+var assert = require('assert');
+var Token = require('../lib/token');
+var redis = require('../lib/redis');
 
 describe('components/token', function () {
-  const store = {};
+  var store = {};
   it('generate & get', function() {
     co(function* () {
-      const token = yield Token.generate({});
-      const _store = yield Token.get(token);
+      var token = yield Token.generate({});
+      var _store = yield Token.get(token);
       yield redis.delAsync(token)
       assert(store === _store);
     });

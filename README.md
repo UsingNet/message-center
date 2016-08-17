@@ -12,7 +12,7 @@ GET /api/message/agent/token
 
 ```
 import io from 'socket.io-client'
-const socket = io('http://ws.dev.usingnet.net/?token={token}');
+var socket = io('http://ws.dev.usingnet.net/?token={token}');
 
 // 新消息
 socket.on('message', function() {
@@ -37,7 +37,7 @@ GET /api/message/agent/token?track_id={track_id}&tid={tid}&
 
 ```  
 import io from 'socket.io-client'
-const socket = io('http://ws.dev.usingnet.net');
+var socket = io('http://ws.dev.usingnet.net');
 
 socket.on('message', function() {
 

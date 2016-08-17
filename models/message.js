@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-const Promise = require('bluebird');
+var mongoose = require('mongoose');
+var Promise = require('bluebird');
 
 mongoose.Promise = Promise;
 
-const Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
-const schema = new Schema({
+var schema = new Schema({
   from: String,
   to: String,
   body: String,
@@ -16,6 +16,6 @@ const schema = new Schema({
   updated_at: { type: Date, default: Date.now }
 }, { collection: 'message' });
 
-const message = mongoose.model('message', schema);
+var message = mongoose.model('message', schema);
 
 module.exports = message;

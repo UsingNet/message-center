@@ -1,8 +1,8 @@
 
-const connect = require('./connect');
-const koa = require('koa.io');
-const track = require('./track');
-const app = koa();
+var connect = require('./connect');
+var koa = require('koa.io');
+var track = require('./track');
+var app = koa();
 
 require('./pusher');
 

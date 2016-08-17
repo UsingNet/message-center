@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const config = require('../config');
+var mongoose = require('mongoose');
+var config = require('../config');
 
 mongoose.connect(config.mongodb);
 

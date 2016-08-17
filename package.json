@@ -11,6 +11,7 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "koa.io": "0.0.3",
+    "mini-logger": "^1.1.1",
     "mongoose": "^4.5.7",
     "redis": "^2.6.2",
     "uuid": "^2.0.2",
