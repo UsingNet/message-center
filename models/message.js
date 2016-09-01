@@ -10,10 +10,11 @@ var schema = new Schema({
   to: String,
   body: String,
   direction: String,
-  pacakge: Object,
+  //pkg: { type: Object, default: {}},
+  package: { type: Object, default: {}},
   type: String,
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now }
 }, { collection: 'message' });
 
 var message = mongoose.model('message', schema);

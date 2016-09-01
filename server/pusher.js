@@ -8,7 +8,6 @@ var config = require('../config');
 
 var allowMethods = ['generate', 'emit', 'online', 'update'];
 socket.bindSync(config.pusher);
-
 socket.on('message', function(identity, message) {
   co(function* () {
     message = message.toString();
@@ -19,13 +18,13 @@ socket.on('message', function(identity, message) {
     }
 
     var resp = {ok: false};
-    if (typeof store !== 'object') {
+    if (typeof store !== 'object' || !Array.isArray(store.params)) {
       resp.data = 'params invild';
       return socket.send([identity, JSON.stringify(resp)]);
     }
+
     switch(store.method) {
       case 'generate':
-        console.log(store.params);
         var token = yield Token.generate(store.params[0].self);
         if (token) {
           resp.ok = true;
@@ -35,19 +34,23 @@ socket.on('message', function(identity, message) {
       case 'update':
         var updated = yield Token.update(store.params[0], store.params[1]);
         resp.ok = true;
-      case 'send':
+      case 'emit':
         var messageModel = new Message(store.params[0]);
+        console.log(store.params[0]);
         yield messageModel.save();
         resp.ok = true;
         var to = online.get(store.params[0].to);
         resp.data = {connectors: {im: false}};
         if (to) {
-          var replied = yield Message.findOne({from: store.params[0].to})
+          var replied = yield Message.findOne({from: store.params[0].to});
+          to.socket.send(store.params[0]);
+          /*
           if (replied) {
             to.socket.emit('message', store.params[0]);
           } else {
-            to.socket.emit('newmessage', store.params[0]);
+            to.socket.emit('message', store.params[0]);
           }
+          */
           resp.data = {connectors: {im: true}};
         }
         break;

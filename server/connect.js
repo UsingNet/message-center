@@ -13,8 +13,8 @@ module.exports = function* (next) {
     this.disconnect();
   }
 
-  store.self.socket = this;
-  online.add(store.token, store.self);
+  store.socket = this;
+  online.add(store.token, store);
 
   // 发送未读消息
   var messages = yield Message.find({to: store.token, 'package.read': {$exists: false}}).limit(50);
