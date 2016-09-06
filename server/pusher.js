@@ -25,7 +25,7 @@ socket.on('message', function(identity, message) {
 
     switch(store.method) {
       case 'generate':
-        var token = yield Token.generate(store.params[0].self);
+        var token = yield Token.generate(store.params[0]);
         if (token) {
           resp.ok = true;
           resp.data = token
@@ -36,7 +36,6 @@ socket.on('message', function(identity, message) {
         resp.ok = true;
       case 'emit':
         var messageModel = new Message(store.params[0]);
-        console.log(store.params[0]);
         yield messageModel.save();
         resp.ok = true;
         var to = online.get(store.params[0].to);
@@ -64,11 +63,11 @@ socket.on('message', function(identity, message) {
         break;
       case 'clients':
         resp.ok = true;
-        resp.data = online.getClients(store.params[0].teamToken);
+        resp.data = online.getClients(store.params[0]);
         break;
       case 'agents':
         resp.ok = true
-        resp.data = online.getAgents(store.params[0].teamToken);
+        resp.data = online.getAgents(store.params[0]);
         break;
       case 'onlines':
         resp.ok = true;
