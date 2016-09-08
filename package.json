@@ -15,14 +15,15 @@
     "mongoose": "^4.5.7",
     "redis": "^2.6.2",
     "uuid": "^2.0.2",
-    "zmq": "^2.15.3"
+    "zmq": "^2.15.3",
+    "co": "^4.6.0"
   },
   "devDependencies": {
-    "co": "^4.6.0",
-    "eslint": "^3.2.2",
-    "eslint-config-airbnb": "^10.0.0",
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb": "^10.0.1",
     "eslint-plugin-import": "^1.13.0",
     "eslint-plugin-jsx-a11y": "^2.1.0",
+    "eslint-plugin-react": "^6.2.0",
     "mocha": "^2.5.3",
     "should": "^10.0.0"
   }

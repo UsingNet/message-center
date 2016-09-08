@@ -1,13 +1,11 @@
-var mongoose = require('mongoose');
-var Promise = require('bluebird');
+const mongoose = require('mongoose');
+const Promise = require('bluebird');
 
 mongoose.Promise = Promise;
 
-var Schema = mongoose.Schema;
-var config = require('../config');
-//var db = mongoose.connect(config.mongodb);
+const Schema = mongoose.Schema;
 
-var schema = new Schema({
+const schema = new Schema({
   referrer: String,
   title: String,
   url: String,
@@ -20,9 +18,9 @@ var schema = new Schema({
   date: String,
   counted: Boolean,
   created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
 }, { collection: 'track' });
 
-var track = mongoose.model('track', schema);
+const track = mongoose.model('track', schema);
 
 module.exports = track;

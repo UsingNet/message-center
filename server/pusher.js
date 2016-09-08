@@ -1,47 +1,55 @@
-var zmq = require('zmq');
-var socket = zmq.socket('router');
-var co = require('co');
-var Message = require('../models').message;
-var Token = require('../lib/token');
-var online = require('../lib/online');
-var config = require('../config');
+const zmq = require('zmq');
+const co = require('co');
+const Message = require('../models').message;
+const Token = require('../lib/token');
+const online = require('../lib/online');
+const config = require('../config');
 
-var allowMethods = ['generate', 'emit', 'online', 'update'];
+const socket = zmq.socket('router');
+
 socket.bindSync(config.pusher);
-socket.on('message', function(identity, message) {
+
+socket.on('message', (_message) => {
   co(function* () {
-    message = message.toString();
+    const message = _message.toString();
+    let store = null;
+    const identity = null;
+
     try {
-      var store = JSON.parse(message);
+      store = JSON.parse(message);
     } catch (e) {
-      return socket.send([identity, JSON.stringify({ok: false, error: 'message is invalid JSON'})])
+      return socket.send([identity, JSON.stringify({
+        ok: false, error: 'message is invalid JSON',
+      })]);
     }
 
-    var resp = {ok: false};
+    const resp = { ok: false };
     if (typeof store !== 'object' || !Array.isArray(store.params)) {
       resp.data = 'params invild';
       return socket.send([identity, JSON.stringify(resp)]);
     }
 
-    switch(store.method) {
+    const messageModel = new Message(store.params[0]);
+
+    switch (store.method) {
       case 'generate':
-        var token = yield Token.generate(store.params[0]);
+        const token = yield Token.generate(store.params[0]);
         if (token) {
           resp.ok = true;
-          resp.data = token
+          resp.data = token;
         }
         break;
       case 'update':
-        var updated = yield Token.update(store.params[0], store.params[1]);
+        //const updated = yield Token.update(store.params[0], store.params[1]);
         resp.ok = true;
+        break;
       case 'emit':
-        var messageModel = new Message(store.params[0]);
         yield messageModel.save();
         resp.ok = true;
-        var to = online.get(store.params[0].to);
-        resp.data = {connectors: {im: false}};
+        let to = online.get(store.params[0].to);
+        resp.data = { connectors: { im: false } };
         if (to) {
-          var replied = yield Message.findOne({from: store.params[0].to});
+          //const replied = yield Message.findOne({from: store.params[0].to});
           to.socket.send(store.params[0]);
           /*
           if (replied) {
@@ -50,13 +58,12 @@ socket.on('message', function(identity, message) {
             to.socket.emit('message', store.params[0]);
           }
           */
-          resp.data = {connectors: {im: true}};
+          resp.data = { connectors: { im: true } };
         }
         break;
       case 'notify':
-        var messageModel = new Message(store.params[0]);
         yield messageModel.save();
-        var to = online.get(store.params[0].to);
+        to = online.get(store.params[0].to);
         if (to) {
           to.socket.send(store.params);
         }
@@ -66,22 +73,21 @@ socket.on('message', function(identity, message) {
         resp.data = online.getClients(store.params[0]);
         break;
       case 'agents':
-        resp.ok = true
+        resp.ok = true;
         resp.data = online.getAgents(store.params[0]);
         break;
       case 'onlines':
         resp.ok = true;
         resp.data = online.all();
         break;
-      case 'default':
-        resp.ok = false,
+      default:
+        resp.ok = false;
         resp.data = 'Method not allow';
         break;
     }
 
     socket.send([identity, JSON.stringify(resp)]);
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
   });
 });
 

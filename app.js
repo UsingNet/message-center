@@ -1,7 +1,5 @@
-var server = require('./server');
-var port = require('./config').port;
-var logger = require('./lib/logger');
+const server = require('./server');
+const port = require('./config').port;
+const logger = require('./lib/logger');
 
-server.listen(port, function() {
-  //logger.info('Server listen on ' + port);
-});
+server.listen(port, () => logger.info(`Server Listen On ${port}`));
