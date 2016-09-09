@@ -1,3 +1,5 @@
+'use strict';
+
 const zmq = require('zmq');
 const co = require('co');
 const Message = require('../models').message;
@@ -9,12 +11,12 @@ const socket = zmq.socket('router');
 
 socket.bindSync(config.pusher);
 
-socket.on('message', (_message) => {
+socket.on('message', (identity, _message) => {
   co(function* () {
     const message = _message.toString();
+    console.log(message);
     let store = null;
-    const identity = null;
-
+    let to = null;
     try {
       store = JSON.parse(message);
     } catch (e) {
@@ -29,24 +31,25 @@ socket.on('message', (_message) => {
       return socket.send([identity, JSON.stringify(resp)]);
     }
 
-    const messageModel = new Message(store.params[0]);
-
     switch (store.method) {
-      case 'generate':
+      case 'generate': {
         const token = yield Token.generate(store.params[0]);
         if (token) {
           resp.ok = true;
           resp.data = token;
         }
         break;
-      case 'update':
+      }
+      case 'update': {
         //const updated = yield Token.update(store.params[0], store.params[1]);
         resp.ok = true;
         break;
-      case 'emit':
+      }
+      case 'emit': {
+        const messageModel = new Message(store.params[0]);
         yield messageModel.save();
         resp.ok = true;
-        let to = online.get(store.params[0].to);
+        to = online.get(store.params[0].to);
         resp.data = { connectors: { im: false } };
         if (to) {
           //const replied = yield Message.findOne({from: store.params[0].to});
@@ -61,31 +64,37 @@ socket.on('message', (_message) => {
           resp.data = { connectors: { im: true } };
         }
         break;
-      case 'notify':
+      }
+      case 'notify': {
+        const messageModel = new Message(store.params[0]);
         yield messageModel.save();
         to = online.get(store.params[0].to);
         if (to) {
           to.socket.send(store.params);
         }
         break;
-      case 'clients':
+      }
+      case 'clients': {
         resp.ok = true;
         resp.data = online.getClients(store.params[0]);
         break;
-      case 'agents':
+      }
+      case 'agents': {
         resp.ok = true;
         resp.data = online.getAgents(store.params[0]);
         break;
-      case 'onlines':
+      }
+      case 'onlines': {
         resp.ok = true;
         resp.data = online.all();
         break;
-      default:
+      }
+      default: {
         resp.ok = false;
         resp.data = 'Method not allow';
         break;
+      }
     }
-
     socket.send([identity, JSON.stringify(resp)]);
   }).catch(() => {
   });

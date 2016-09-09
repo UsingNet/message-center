@@ -1,0 +1,15 @@
+{
+  "extends": "eslint-config-airbnb",
+  "rules": {
+    "spaced-comment": [0],
+    "strict": 2
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js"],
+        "moduleDirectory": ["node_modules", "./src"]
+      }
+    }
+  }
+}
