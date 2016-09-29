@@ -14,7 +14,6 @@ socket.bindSync(config.pusher);
 socket.on('message', (identity, _message) => {
   co(function* () {
     const message = _message.toString();
-    console.log(message);
     let store = null;
     let to = null;
     try {
@@ -46,10 +45,11 @@ socket.on('message', (identity, _message) => {
         break;
       }
       case 'emit': {
-        const messageModel = new Message(store.params[0]);
+        const msg = store.params[0];
+        const messageModel = new Message(msg);
         yield messageModel.save();
         resp.ok = true;
-        to = online.get(store.params[0].to);
+        to = online.get(msg.to, msg.direction === 'SEND' ? 'client' : 'agent');
         resp.data = { connectors: { im: false } };
         if (to) {
           //const replied = yield Message.findOne({from: store.params[0].to});
@@ -95,6 +95,9 @@ socket.on('message', (identity, _message) => {
         break;
       }
     }
+
+    console.log(resp);
+
     socket.send([identity, JSON.stringify(resp)]);
   }).catch(() => {
   });

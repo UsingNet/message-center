@@ -14,7 +14,7 @@ module.exports = function* connect(next) {
   }
 
   store.socket = this;
-  online.add(store.team.token, store);
+  online.add(store);
 
   // 发送未读消息
   const messages = yield Message.find({
@@ -22,5 +22,5 @@ module.exports = function* connect(next) {
   }).limit(50);
   this.send(messages);
   yield next;
-  online.del(store.self.token);
+  online.del(store);
 };
