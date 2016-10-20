@@ -48,13 +48,15 @@ socket.on('message', (identity, _message) => {
         const msg = store.params[0];
         const messageModel = new Message(msg);
         const m = yield messageModel.save();
+        const doc = m._doc
+        doc.created_at = new Date(doc.created_at).getTime();
 
         resp.ok = true;
         to = online.get(msg.to, msg.direction === 'SEND' ? 'client' : 'agent');
         resp.data = { connectors: { im: false } };
         if (to) {
           //const replied = yield Message.findOne({from: store.params[0].to});
-          to.socket.send(m);
+          to.socket.send(doc);
           /*
           if (replied) {
             to.socket.emit('message', store.params[0]);
