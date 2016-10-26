@@ -94,10 +94,13 @@ socket.on('message', (identity, _message) => {
       }
       case 'offline': {
         resp.ok = true;
-        resp.data = 'ok'
+        resp.data = 'ok';
         const agent = online.get(store.params[0], 'agent');
         if (agent) {
-          agent.socket.send('offline');
+          agent.socket.send({
+            type: 'event',
+            action: 'offline',
+          });
         }
         break;
       }
