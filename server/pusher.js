@@ -92,14 +92,21 @@ socket.on('message', (identity, _message) => {
         resp.data = online.all();
         break;
       }
+      case 'offline': {
+        resp.ok = true;
+        resp.data = 'ok'
+        const agent = online.get(store.params[0], 'agent');
+        if (agent) {
+          agent.socket.send('offline');
+        }
+        break;
+      }
       default: {
         resp.ok = false;
         resp.data = 'Method not allow';
         break;
       }
     }
-
-    console.log(resp);
 
     socket.send([identity, JSON.stringify(resp)]);
   }).catch(() => {
