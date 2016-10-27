@@ -50,10 +50,12 @@ socket.on('message', (identity, _message) => {
         const m = yield messageModel.save();
         const doc = m._doc
         doc.created_at = new Date(doc.created_at).getTime();
+        resp.data = {};
+        resp.data.id = doc._id;
 
         resp.ok = true;
         to = online.get(msg.to, msg.direction === 'SEND' ? 'client' : 'agent');
-        resp.data = { connectors: { im: false } };
+        resp.data.connectors = { im: false };
         if (to) {
           //const replied = yield Message.findOne({from: store.params[0].to});
           to.socket.send(doc);
@@ -64,7 +66,7 @@ socket.on('message', (identity, _message) => {
             to.socket.emit('message', store.params[0]);
           }
           */
-          resp.data = { connectors: { im: true } };
+          resp.data.connectors = { im: true };
         }
         break;
       }
@@ -100,7 +102,7 @@ socket.on('message', (identity, _message) => {
           agent.socket.send({
             type: 'event',
             action: 'offline',
-            from: store.params[1]
+            from: store.params[1],
           });
         }
         break;
