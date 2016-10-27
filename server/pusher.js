@@ -100,6 +100,7 @@ socket.on('message', (identity, _message) => {
           agent.socket.send({
             type: 'event',
             action: 'offline',
+            from: store.params[1]
           });
         }
         break;
