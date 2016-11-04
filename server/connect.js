@@ -1,13 +1,13 @@
 const Token = require('../lib/token');
 const online = require('../lib/online');
 const Message = require('../models').message;
+const Track = require('../models').track;
 
 module.exports = function* connect(next) {
   const token = this.query.token;
   if (!token) {
     this.disconnect();
   }
-
   const store = yield Token.get(token);
   if (!store) {
     this.disconnect();
@@ -23,4 +23,21 @@ module.exports = function* connect(next) {
   this.send(messages);
   yield next;
   online.del(store);
+
+  // 添加 track
+  const lastTrack = yield Track.findOne({ contact_id: store.id }).sort({ id: -1 });
+  if (lastTrack) {
+    lastTrack.update({ count: lastTrack.count + 1 });
+  } else {
+    const track = new Track({
+      title: store.package.title,
+      url: store.package.referrer,
+      contact_id: store.id,
+      team_id: store.team_id,
+      ip: store.package.ip,
+      user_agent: store.package.user_agent,
+      count: 0,
+    });
+    yield track.save();
+  }
 };

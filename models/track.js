@@ -6,17 +6,13 @@ mongoose.Promise = Promise;
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  referrer: String,
   title: String,
   url: String,
-  track_id: String,
-  page_id: String,
+  contact_id: String,
   team_id: Number,
   ip: String,
   user_agent: String,
-  location: String,
-  date: String,
-  counted: Boolean,
+  count: Number,
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 }, { collection: 'track' });
