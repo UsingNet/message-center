@@ -26,6 +26,7 @@ module.exports = function* connect(next) {
 
   // 添加 track
   const lastTrack = yield Track.findOne({ contact_id: store.id }).sort({ id: -1 });
+  console.log(store)
   if (lastTrack) {
     yield lastTrack.update({ count: lastTrack.count + 1 });
   } else {

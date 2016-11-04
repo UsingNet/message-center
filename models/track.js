@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
   title: String,
   url: String,
-  contact_id: String,
+  contact_id: Number,
+  date: String,
   team_id: Number,
   ip: String,
   user_agent: String,
