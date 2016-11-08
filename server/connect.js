@@ -26,15 +26,14 @@ module.exports = function* connect(next) {
 
   // 添加 track
   const lastTrack = yield Track.findOne({ contact_id: store.id }).sort({ id: -1 });
-  console.log(store)
   if (lastTrack) {
     yield lastTrack.update({ count: lastTrack.count + 1 });
   } else {
     const track = new Track({
       title: store.package.title,
       url: store.package.referrer,
-      contact_id: store.id,
-      team_id: store.team_id,
+      contact_id: Number(store.id),
+      team_id: Number(store.team_id),
       ip: store.package.ip,
       user_agent: store.package.user_agent,
       count: 0,
