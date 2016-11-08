@@ -32,8 +32,8 @@ module.exports = function* connect(next) {
     const track = new Track({
       title: store.package.title,
       url: store.package.referrer,
-      contact_id: Number(store.id),
-      team_id: Number(store.team_id),
+      contact_id: parseInt(store.id, 10),
+      team_id: parseInt(store.team_id, 10),
       ip: store.package.ip,
       user_agent: store.package.user_agent,
       count: 0,
