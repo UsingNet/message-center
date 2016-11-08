@@ -25,7 +25,8 @@ module.exports = function* connect(next) {
   online.del(store);
 
   // 添加 track
-  const lastTrack = yield Track.findOne({ contact_id: store.id }).sort({ id: -1 });
+  const lastTrack = yield Track.findOne({ contact_id: store.id,
+    url: store.package.referrer }).sort({ id: -1 });
   if (lastTrack) {
     yield lastTrack.update({ count: lastTrack.count + 1 });
   } else {
