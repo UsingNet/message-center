@@ -57,26 +57,22 @@ socket.on('message', (identity, _message) => {
         to = online.get(msg.to, msg.direction === 'SEND' ? 'client' : 'agent');
         resp.data.connectors = { im: false };
         if (to) {
-          //const replied = yield Message.findOne({from: store.params[0].to});
           to.socket.send(doc);
-          /*
-          if (replied) {
-            to.socket.emit('message', store.params[0]);
-          } else {
-            to.socket.emit('message', store.params[0]);
-          }
-          */
           resp.data.connectors = { im: true };
         }
         break;
       }
-      case 'notify': {
-        const messageModel = new Message(store.params[0]);
-        yield messageModel.save();
-        to = online.get(store.params[0].to);
-        if (to) {
-          to.socket.send(store.params);
+      case 'undo': {
+        const msg = yield Message.findOne({ _id: store.params[0] });
+        yield msg.update({ 'package.undo': true });
+        const client = online.get(msg.to, 'client');
+        if (client) {
+          client.socket.emit('message', {
+            type: 'undo',
+            id: msg._id,
+          });
         }
+        resp.data.connectors = { im: true };
         break;
       }
       case 'clients': {
