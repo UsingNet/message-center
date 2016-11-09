@@ -72,7 +72,7 @@ socket.on('message', (identity, _message) => {
             id: msg._id,
           });
         }
-        resp.data.connectors = { im: true };
+        resp.ok = true;
         break;
       }
       case 'clients': {
@@ -109,7 +109,7 @@ socket.on('message', (identity, _message) => {
         break;
       }
     }
-
+    console.log(resp);
     socket.send([identity, JSON.stringify(resp)]);
   }).catch(() => {
   });
