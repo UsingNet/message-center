@@ -109,7 +109,6 @@ socket.on('message', (identity, _message) => {
         break;
       }
     }
-    console.log(resp);
     socket.send([identity, JSON.stringify(resp)]);
   }).catch(() => {
   });
