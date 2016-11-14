@@ -14,6 +14,7 @@ module.exports = function* connect(next) {
   }
 
   store.socket = this;
+  store.connect_at = Date.now();
   online.add(store);
 
   // 发送未读消息
