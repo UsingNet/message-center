@@ -29,7 +29,7 @@ module.exports = function* connect(next) {
     url: store.package.referrer }).sort({ id: -1 });
   if (lastTrack) {
     yield lastTrack.update({ count: lastTrack.count + 1 });
-  } else {
+  } else if (store.package) {
     const track = new Track({
       title: store.package.title,
       url: store.package.referrer,
